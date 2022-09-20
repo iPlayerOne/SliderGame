@@ -31,7 +31,7 @@ struct UISliderView: UIViewRepresentable {
     }
     
     func makeCoordinator() -> UISliderView.Coordinator {
-        Coordinator(value: $currentValue)
+        Coordinator(currentValue: $currentValue, targetValue: $targetValue, thumbOpacity: $thumbOpacity)
     }
     
 }

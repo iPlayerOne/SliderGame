@@ -11,7 +11,7 @@ struct ContentView: View {
     
     @State private var currentValue = 5.0
     @State private var targetValue = Int.random(in: 0...100)
-    @State var thumbOpacity = 1.0
+    @State private var thumbOpacity = 1.0
     @State private var showAlert = false
     
     var body: some View {
@@ -24,16 +24,17 @@ struct ContentView: View {
                 Text("0")
                 UISliderView(
                     currentValue: $currentValue,
-                    thumbOpacity: thumbOpacity
+                    targetValue: $targetValue,
+                    thumbOpacity: $thumbOpacity
                 )
                 .onChange(of: currentValue) { newValue in
-                    thumbOpacity = CGFloat(computeScore() / 100)
-                
+                    
+                    
                 }
                 
                 Text("100")
             }
-            Button("Проверь меня!", action: {showAlert = true })
+            Button("Проверь меня!", action: { showAlert = true })
                 .padding()
             Button("Начать заново", action: {
                 showAlert = false
@@ -44,7 +45,7 @@ struct ContentView: View {
         }
         .padding()
         .alert("Результат:", isPresented: $showAlert, actions: {}){
-            Text("\(computeScore())")
+            Text("\(lround(thumbOpacity * 100))")
             
         }
     }
