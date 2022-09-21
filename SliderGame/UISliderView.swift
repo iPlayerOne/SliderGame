@@ -35,35 +35,35 @@ struct UISliderView: UIViewRepresentable {
     }
     
 }
+
+extension UISliderView {
     
-    extension UISliderView {
+    class Coordinator: NSObject {
         
-        class Coordinator: NSObject {
+        @Binding var currentValue: Double
+        @Binding var targetValue: Int
+        @Binding var thumbOpacity: Double
+        
+        
+        init(currentValue: Binding<Double>, targetValue: Binding<Int>, thumbOpacity: Binding<Double> ) {
+            self._currentValue = currentValue
+            self._targetValue = targetValue
+            self._thumbOpacity = thumbOpacity
             
-            @Binding var currentValue: Double
-            @Binding var targetValue: Int
-            @Binding var thumbOpacity: Double
-           
-    
-            init(currentValue: Binding<Double>, targetValue: Binding<Int>, thumbOpacity: Binding<Double> ) {
-                self._currentValue = currentValue
-                self._targetValue = targetValue
-                self._thumbOpacity = thumbOpacity
-                
-            }
+        }
+        
+        @objc func valueChanged(_ sender: UISlider) {
+            currentValue = Double(sender.value)
+            thumbOpacity = Double(computeScore()) / 100
             
-            @objc func valueChanged(_ sender: UISlider) {
-                currentValue = Double(sender.value)
-                thumbOpacity = Double(computeScore()) / 100
-                
-            }
-            
-            private func computeScore() -> Int {
-                let difference = abs(targetValue - lround(currentValue))
-                return 100 - difference
-            }
+        }
+        
+        private func computeScore() -> Int {
+            let difference = abs(targetValue - lround(currentValue))
+            return 100 - difference
         }
     }
+}
 
 struct UISliderView_Previews: PreviewProvider {
     static var previews: some View {
