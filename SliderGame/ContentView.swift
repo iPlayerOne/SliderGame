@@ -9,47 +9,42 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @State private var currentValue = 5.0
-    @State private var targetValue = Int.random(in: 0...100)
-    @State private var thumbOpacity = 1.0
+    @State private var currentValue = Double.random(in: 0...100)
+    @State private var targetValue = Int.random(in: 1...100)
     @State private var showAlert = false
     
     var body: some View {
         VStack {
-            Text("Передвиньте слайдер как можно ближе к: \(targetValue)")
-                .lineLimit(1)
-                .font(.system(size: 15))
+            SliderView(
+                currentValue: $currentValue,
+                targetValue: targetValue,
+                color: .red,
+                alpha: computedScore()
+            )
             
-            HStack {
-                Text("0")
-                UISliderView(
-                    currentValue: $currentValue,
-                    targetValue: $targetValue,
-                    thumbOpacity: $thumbOpacity
-                )
-                .onChange(of: currentValue) { newValue in
-                    
-                    
-                }
-                
-                Text("100")
+            Button("Check me!") {
+                showAlert.toggle()
             }
-            Button("Проверь меня!", action: { showAlert = true })
-                .padding()
-            Button("Начать заново", action: {
-                showAlert = false
-                currentValue = 0
-                targetValue = Int.random(in: 0...100)
-                
-            })
-        }
-        .padding()
-        .alert("Результат:", isPresented: $showAlert, actions: {}){
-            Text("\(lround(thumbOpacity * 100))")
+            .padding()
+            .alert(
+                "Your Score",
+                isPresented: $showAlert,
+                actions: {}
+            ) {
+                Text(computedScore().formatted())
+            }
             
+            Button("Try again") {
+                currentValue = Double.random(in: 0...100)
+                targetValue = Int.random(in: 1...100)
+            }
         }
     }
     
+    private func computedScore() -> Int {
+        let difference = abs(targetValue - lround(currentValue))
+        return 100 - difference
+    }
 }
 
 struct ContentView_Previews: PreviewProvider {
